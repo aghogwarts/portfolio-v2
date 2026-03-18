@@ -115,7 +115,7 @@ button {
 
 /* ── Section shared ── */
 .section {
-  padding: 8rem 0;
+  padding: 5rem 0;
 }
 .section-alt {
   background: var(--bg-alt);

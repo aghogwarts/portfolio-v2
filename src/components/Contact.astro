@@ -1,5 +1,6 @@
 ---
 import { SITE } from '../data/portfolio';
+import Icon from './Icon.astro';
 ---
 
 <section class="section" id="contact">
@@ -14,7 +15,9 @@ import { SITE } from '../data/portfolio';
         </p>
         <div class="contact-links">
           <a href={`mailto:${SITE.email}`} class="contact-link">
-            <span class="link-icon mono">@</span>{SITE.email}
+            <span class="link-icon"><Icon name="Mail" size={15} /></span>{
+              SITE.email
+            }
           </a>
           {
             SITE.social.map((s) => (
@@ -24,7 +27,18 @@ import { SITE } from '../data/portfolio';
                 rel="noopener"
                 class="contact-link"
               >
-                <span class="link-icon mono">{s.abbr}</span>
+                <span class="link-icon">
+                  <Icon
+                    name={
+                      s.abbr === 'GH'
+                        ? 'Github'
+                        : s.abbr === 'LI'
+                          ? 'Linkedin'
+                          : 'Twitter'
+                    }
+                    size={15}
+                  />
+                </span>
                 {s.label}
               </a>
             ))

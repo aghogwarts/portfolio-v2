@@ -3,7 +3,7 @@ title: "Sinhagad Fort Ride"
 city: "Pune"
 date: "2025-03-15"
 tags: ["ride", "ghats", "solo", "sunrise"]
-cover: "/trips/sinhagad.jpg"
+# cover: "/trips/sinhagad.jpg"
 km: 62
 featured: true
 ---

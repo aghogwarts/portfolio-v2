@@ -1,5 +1,12 @@
 ---
 import { SKILLS } from '../data/portfolio';
+import Icon from './Icon.astro';
+
+const iconMap: Record<string, string> = {
+  LG: 'Code2',
+  FW: 'Layers',
+  OPS: 'Container',
+};
 ---
 
 <section class="section section-alt" id="skills">
@@ -11,7 +18,9 @@ import { SKILLS } from '../data/portfolio';
         SKILLS.map((cat) => (
           <div class="skill-block reveal">
             <div class="skill-block-head">
-              <span class="skill-abbr mono accent">{cat.abbr}</span>
+              <span class="skill-icon">
+                <Icon name={iconMap[cat.abbr]} size={18} />
+              </span>
               <span class="skill-cat mono">{cat.category}</span>
             </div>
             <div class="pill-row">
@@ -44,10 +53,10 @@ import { SKILLS } from '../data/portfolio';
     gap: 0.75rem;
     margin-bottom: 1rem;
   }
-  .skill-abbr {
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
+  .skill-icon {
+    color: var(--accent);
+    display: flex;
+    align-items: center;
   }
   .skill-cat {
     font-size: 0.68rem;
