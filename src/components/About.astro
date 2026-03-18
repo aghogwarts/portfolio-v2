@@ -1,0 +1,67 @@
+---
+import { ABOUT } from '../data/portfolio';
+---
+<section class="section" id="about">
+  <div class="container">
+    <p class="section-label"><span class="num">01 /</span> About</p>
+    <div class="about-grid">
+      <div class="reveal">
+        <h2 class="section-title">Developer.<br />Explorer.<br />Human.</h2>
+        <p class="about-bio">{ABOUT.bio}</p>
+        <div class="about-tags">
+          {ABOUT.tags.map(t => <span class="tag">{t}</span>)}
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="stat-grid">
+          {ABOUT.stats.map(s => (
+            <div class="stat">
+              <span class="stat-val">{s.value}</span>
+              <span class="stat-lbl mono">{s.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.about-grid {
+  display: grid; grid-template-columns: 1.4fr 1fr;
+  gap: 5rem; align-items: start;
+}
+.about-bio {
+  font-size: 1.1rem; line-height: 1.8;
+  color: var(--muted); margin-bottom: 2rem;
+}
+.about-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.tag {
+  font-family: var(--font-mono); font-size: 0.68rem;
+  letter-spacing: 0.08em; padding: 0.35rem 0.9rem;
+  border: 1px solid var(--border-2); color: var(--subtle);
+  border-radius: 999px; transition: border-color 0.2s, color 0.2s;
+}
+.tag:hover { border-color: var(--accent); color: var(--accent); }
+.stat-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden;
+}
+.stat {
+  background: var(--surface); padding: 2.5rem 1rem;
+  display: flex; flex-direction: column; align-items: center;
+}
+.stat-val {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: 3.5rem; line-height: 1; color: var(--accent);
+}
+.stat-lbl {
+  font-size: 0.65rem; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--subtle); margin-top: 0.5rem;
+}
+@media (max-width: 768px) {
+  .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+}
+</style>

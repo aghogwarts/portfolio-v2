@@ -1,0 +1,77 @@
+---
+import { SITE } from '../data/portfolio';
+---
+<section class="hero" id="hero">
+  <div class="hero-bg-text" aria-hidden="true">ANSH</div>
+  <div class="hero-content">
+    <p class="hero-eyebrow mono accent">// hello world</p>
+    <h1 class="hero-name">Ansh<br />Goyal</h1>
+    <p class="hero-tagline" id="heroTagline"></p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">See My Work</a>
+      <a href="#contact"  class="btn btn-ghost">Get In Touch</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    <span class="mono">scroll</span>
+  </div>
+</section>
+
+<style>
+.hero {
+  position: relative; min-height: 100vh;
+  display: flex; align-items: center;
+  padding: calc(var(--nav-h) + 4rem) 2.5rem 4rem;
+  overflow: hidden;
+}
+.hero-bg-text {
+  position: absolute; top: 50%; right: 5%;
+  transform: translateY(-50%);
+  font-family: var(--font-display); font-weight: 900;
+  font-size: clamp(10rem, 28vw, 24rem);
+  line-height: 1; color: transparent;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.04);
+  user-select: none; pointer-events: none; white-space: nowrap;
+}
+.hero-content { position: relative; z-index: 1; max-width: 800px; padding: 5rem; }
+.hero-eyebrow { font-size: 0.75rem; letter-spacing: 0.12em; margin-bottom: 1.5rem; }
+.hero-name {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: clamp(5rem, 16vw, 13rem);
+  line-height: 0.88; letter-spacing: -0.03em; margin-bottom: 1.5rem;
+}
+.hero-tagline {
+  font-family: var(--font-display); font-weight: 300;
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  color: var(--muted); margin-bottom: 3rem;
+  min-height: 2.4rem; letter-spacing: 0.02em;
+  transition: opacity 0.3s;
+}
+.hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+.hero-scroll {
+  position: absolute; bottom: 2.5rem; left: 2.5rem;
+  display: flex; align-items: center; gap: 1rem;
+  color: var(--subtle); font-size: 0.68rem;
+  letter-spacing: 0.15em; text-transform: uppercase;
+}
+.hero-scroll-line {
+  width: 40px; height: 1px; background: var(--subtle);
+}
+</style>
+
+<script define:vars={{ taglines: SITE.taglines }}>
+  const el = document.getElementById('heroTagline');
+  let i = 0;
+  const tick = () => {
+    if (!el) return;
+    el.style.opacity = '0';
+    setTimeout(() => {
+      el.textContent = taglines[i % taglines.length];
+      el.style.opacity = '1';
+      i++;
+    }, 300);
+  };
+  tick();
+  setInterval(tick, 2800);
+</script>

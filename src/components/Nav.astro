@@ -1,0 +1,123 @@
+---
+interface Props { page?: string; }
+const { page = 'home' } = Astro.props;
+---
+<nav class="nav" id="nav">
+  <a href="/" class="nav-logo">AG<span class="accent">.</span></a>
+
+  {page === 'home' && (
+    <ul class="nav-links">
+      <li><a href="#about"    class="nav-link">About</a></li>
+      <li><a href="#skills"   class="nav-link">Skills</a></li>
+      <li><a href="#projects" class="nav-link">Projects</a></li>
+      <li><a href="#journey"  class="nav-link">Journey</a></li>
+      <li><a href="#hobbies"  class="nav-link">Hobbies</a></li>
+      <li><a href="#contact"  class="nav-link">Contact</a></li>
+    </ul>
+  )}
+
+  {page === 'journey' && (
+    <a href="/" class="nav-back">← Back to portfolio</a>
+  )}
+
+  <button class="nav-burger" id="burger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+{page === 'home' && (
+  <div class="mobile-menu" id="mobileMenu">
+    <ul>
+      <li><a href="#about"    class="mobile-link">About</a></li>
+      <li><a href="#skills"   class="mobile-link">Skills</a></li>
+      <li><a href="#projects" class="mobile-link">Projects</a></li>
+      <li><a href="#journey"  class="mobile-link">Journey</a></li>
+      <li><a href="#hobbies"  class="mobile-link">Hobbies</a></li>
+      <li><a href="#contact"  class="mobile-link">Contact</a></li>
+    </ul>
+  </div>
+)}
+
+<style>
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--nav-h);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2.5rem;
+  transition: background 0.3s, border-color 0.3s;
+  border-bottom: 1px solid transparent;
+}
+.nav.scrolled {
+  background: rgba(13,13,13,0.92);
+  backdrop-filter: blur(12px);
+  border-color: var(--border);
+}
+.nav-logo {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: 1.5rem; letter-spacing: -0.02em;
+}
+.nav-links {
+  display: flex; gap: 2.5rem; list-style: none;
+}
+.nav-link {
+  font-family: var(--font-mono); font-size: 0.72rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); transition: color 0.2s;
+}
+.nav-link:hover { color: var(--text); }
+.nav-back {
+  font-family: var(--font-mono); font-size: 0.72rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--subtle); transition: color 0.2s;
+}
+.nav-back:hover { color: var(--accent); }
+.nav-burger {
+  display: none; flex-direction: column;
+  gap: 5px; padding: 4px;
+}
+.nav-burger span {
+  display: block; width: 24px; height: 2px;
+  background: var(--text);
+  transition: transform 0.3s, opacity 0.3s;
+}
+.nav-burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-burger.open span:nth-child(2) { opacity: 0; }
+.nav-burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.mobile-menu {
+  position: fixed; inset: 0; z-index: 99;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.3s;
+}
+.mobile-menu.open { opacity: 1; pointer-events: auto; }
+.mobile-menu ul { list-style: none; text-align: center; }
+.mobile-link {
+  display: block; padding: 1rem 2rem;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 2.5rem; letter-spacing: -0.02em;
+  transition: color 0.2s;
+}
+.mobile-link:hover { color: var(--accent); }
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav-burger { display: flex; }
+}
+</style>
+
+<script>
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav')?.classList.toggle('scrolled', window.scrollY > 60);
+  });
+  const burger = document.getElementById('burger');
+  const menu   = document.getElementById('mobileMenu');
+  burger?.addEventListener('click', () => {
+    burger.classList.toggle('open');
+    menu?.classList.toggle('open');
+  });
+  document.querySelectorAll('.mobile-link').forEach(l =>
+    l.addEventListener('click', () => {
+      burger?.classList.remove('open');
+      menu?.classList.remove('open');
+    })
+  );
+</script>
