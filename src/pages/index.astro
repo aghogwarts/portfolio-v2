@@ -1,20 +1,22 @@
 ---
-import Base    from '../layouts/Base.astro';
-import Nav     from '../components/Nav.astro';
-import Hero    from '../components/Hero.astro';
-import About   from '../components/About.astro';
-import Skills  from '../components/Skills.astro';
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Skills from '../components/Skills.astro';
 import Projects from '../components/Projects.astro';
+import JourneyTeaser from '../components/JourneyTeaser.astro';
 import Hobbies from '../components/Hobbies.astro';
 import Contact from '../components/Contact.astro';
 ---
+
 <Base>
   <Nav page="home" />
   <Hero />
   <About />
   <Skills />
   <Projects />
-  <!-- Journey teaser goes here next step -->
+  <JourneyTeaser />
   <Hobbies />
   <Contact />
   <footer class="footer">
@@ -26,12 +28,17 @@ import Contact from '../components/Contact.astro';
 </Base>
 
 <style>
-.footer {
-  padding: 1.5rem 0; border-top: 1px solid var(--border);
-  background: var(--bg);
-}
-.footer-inner {
-  display: flex; justify-content: space-between; align-items: center;
-  font-size: 0.72rem; color: var(--subtle); letter-spacing: 0.06em;
-}
+  .footer {
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.72rem;
+    color: var(--subtle);
+    letter-spacing: 0.06em;
+  }
 </style>

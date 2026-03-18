@@ -1,0 +1,241 @@
+---
+import { getCollection } from 'astro:content';
+
+const allTrips = await getCollection('trips');
+const recent = allTrips
+  .sort(
+    (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+  )
+  .slice(0, 3);
+
+const totalKm = allTrips.reduce((sum, t) => sum + (t.data.km ?? 0), 0);
+const cities = [...new Set(allTrips.map((t) => t.data.city))].length;
+---
+
+<section class="section" id="journey">
+  <div class="container">
+    <p class="section-label"><span class="num">04 /</span> Journey</p>
+    <div class="journey-head reveal">
+      <h2 class="section-title">The Journey</h2>
+      <a href="/journey" class="journey-all mono">View full log →</a>
+    </div>
+    <p class="journey-sub reveal mono">
+      // every ride, every place, every story — updated as I go
+    </p>
+
+    <div class="journey-stats reveal">
+      <div class="j-stat">
+        <span class="j-stat-val">{allTrips.length}</span>
+        <span class="j-stat-lbl mono">Trips</span>
+      </div>
+      <div class="j-stat">
+        <span class="j-stat-val">{cities}</span>
+        <span class="j-stat-lbl mono">Cities</span>
+      </div>
+      <div class="j-stat">
+        <span class="j-stat-val">{totalKm > 0 ? `${totalKm}` : '—'}</span>
+        <span class="j-stat-lbl mono">km ridden</span>
+      </div>
+    </div>
+
+    <div class="trip-cards">
+      {
+        recent.map((trip) => (
+          <a href={`/journey#${trip.id}`} class="trip-card reveal">
+            {trip.data.cover ? (
+              <img
+                src={trip.data.cover}
+                alt={trip.data.title}
+                class="trip-card-img"
+              />
+            ) : (
+              <div class="trip-card-img trip-card-img--empty">
+                <span class="mono">no photo yet</span>
+              </div>
+            )}
+            <div class="trip-card-body">
+              <div class="trip-card-meta">
+                <span class="trip-city mono">{trip.data.city}</span>
+                <span class="trip-date mono">{trip.data.date}</span>
+              </div>
+              <h3 class="trip-title">{trip.data.title}</h3>
+              <div class="trip-tags">
+                {trip.data.tags.slice(0, 3).map((t) => (
+                  <span class="pill">{t}</span>
+                ))}
+                {trip.data.km && (
+                  <span class="pill accent-pill">{trip.data.km}km</span>
+                )}
+              </div>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+
+    <div class="journey-cta reveal">
+      <a href="/journey" class="btn btn-ghost">See All Trips →</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .journey-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 0;
+  }
+  .journey-head .section-title {
+    margin-bottom: 0;
+  }
+  .journey-all {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    transition: opacity 0.2s;
+    padding-bottom: 0.5rem;
+  }
+  .journey-all:hover {
+    opacity: 0.7;
+  }
+  .journey-sub {
+    font-size: 0.75rem;
+    color: var(--subtle);
+    letter-spacing: 0.06em;
+    margin-bottom: 2.5rem;
+    margin-top: 0.5rem;
+  }
+  .journey-stats {
+    display: flex;
+    gap: 0;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 3rem;
+    width: fit-content;
+  }
+  .j-stat {
+    background: var(--surface);
+    padding: 1.5rem 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 1px solid var(--border);
+  }
+  .j-stat:last-child {
+    border-right: none;
+  }
+  .j-stat-val {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 2.5rem;
+    line-height: 1;
+    color: var(--accent);
+  }
+  .j-stat-lbl {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--subtle);
+    margin-top: 0.4rem;
+  }
+  .trip-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+  .trip-card {
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    transition: background 0.2s;
+  }
+  .trip-card:hover {
+    background: var(--surface);
+  }
+  .trip-card-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 1px solid var(--border);
+  }
+  .trip-card-img--empty {
+    width: 100%;
+    height: 180px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .trip-card-img--empty span {
+    font-size: 0.65rem;
+    color: var(--border-2);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .trip-card-body {
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .trip-card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .trip-city {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .trip-date {
+    font-size: 0.65rem;
+    letter-spacing: 0.06em;
+    color: var(--subtle);
+  }
+  .trip-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.3rem;
+    letter-spacing: -0.01em;
+  }
+  .trip-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+  .accent-pill {
+    background: rgba(255, 107, 53, 0.1);
+    color: var(--accent);
+  }
+  .journey-cta {
+    display: flex;
+    justify-content: center;
+    padding-top: 1rem;
+  }
+  @media (max-width: 768px) {
+    .trip-cards {
+      grid-template-columns: 1fr;
+    }
+    .journey-stats {
+      width: 100%;
+    }
+    .j-stat {
+      padding: 1.25rem 1.5rem;
+      flex: 1;
+    }
+  }
+</style>

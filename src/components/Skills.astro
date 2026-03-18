@@ -1,41 +1,68 @@
 ---
 import { SKILLS } from '../data/portfolio';
 ---
+
 <section class="section section-alt" id="skills">
   <div class="container">
     <p class="section-label"><span class="num">02 /</span> Skills</p>
     <h2 class="section-title reveal">What I Build With</h2>
     <div class="skills-grid">
-      {SKILLS.map(cat => (
-        <div class="skill-block reveal">
-          <div class="skill-block-head">
-            <span class="skill-abbr mono accent">{cat.abbr}</span>
-            <span class="skill-cat mono">{cat.category}</span>
+      {
+        SKILLS.map((cat) => (
+          <div class="skill-block reveal">
+            <div class="skill-block-head">
+              <span class="skill-abbr mono accent">{cat.abbr}</span>
+              <span class="skill-cat mono">{cat.category}</span>
+            </div>
+            <div class="pill-row">
+              {cat.items.map((item) => (
+                <span class="pill">{item}</span>
+              ))}
+            </div>
           </div>
-          <div class="pill-row">
-            {cat.items.map(item => <span class="pill">{item}</span>)}
-          </div>
-        </div>
-      ))}
+        ))
+      }
     </div>
   </div>
 </section>
 
 <style>
-.skills-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
-}
-.skill-block {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 1.5rem;
-}
-.skill-block-head {
-  display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;
-}
-.skill-abbr { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; }
-.skill-cat  { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
-.pill-row   { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-@media (max-width: 768px) {
-  .skills-grid { grid-template-columns: 1fr; }
-}
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .skill-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+  }
+  .skill-block-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .skill-abbr {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+  .skill-cat {
+    font-size: 0.68rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  @media (max-width: 768px) {
+    .skills-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>

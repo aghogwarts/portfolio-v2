@@ -1,44 +1,65 @@
 ---
 import { HOBBIES } from '../data/portfolio';
 ---
+
 <section class="section section-alt" id="hobbies">
   <div class="container">
     <p class="section-label"><span class="num">05 /</span> Hobbies</p>
     <h2 class="section-title reveal">Beyond the Screen</h2>
     <div class="hobbies-grid">
-      {HOBBIES.map(h => (
-        <div class="hobby-card reveal" style={`--accent: ${h.accent}`}>
-          <span class="hobby-abbr mono">{h.abbr}</span>
-          <h3 class="hobby-name">{h.label}</h3>
-          <p class="hobby-desc">{h.desc}</p>
-        </div>
-      ))}
+      {
+        HOBBIES.map((h) => (
+          <div class="hobby-card reveal" style={`--accent: ${h.accent}`}>
+            <span class="hobby-abbr mono">{h.abbr}</span>
+            <h3 class="hobby-name">{h.label}</h3>
+            <p class="hobby-desc">{h.desc}</p>
+          </div>
+        ))
+      }
     </div>
   </div>
 </section>
 
 <style>
-.hobbies-grid {
-  display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem;
-}
-.hobby-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-top: 2px solid var(--accent); border-radius: var(--radius);
-  padding: 1.5rem 1.25rem;
-}
-.hobby-abbr {
-  display: block; font-size: 0.85rem; font-weight: 700;
-  color: var(--accent); letter-spacing: 0.06em; margin-bottom: 0.75rem;
-}
-.hobby-name {
-  font-size: 0.95rem; font-weight: 700;
-  letter-spacing: -0.01em; margin-bottom: 0.5rem;
-}
-.hobby-desc { font-size: 0.82rem; color: var(--subtle); line-height: 1.6; }
-@media (max-width: 900px) {
-  .hobbies-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 500px) {
-  .hobbies-grid { grid-template-columns: 1fr; }
-}
+  .hobbies-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+  }
+  .hobby-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.25rem;
+  }
+  .hobby-abbr {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+    margin-bottom: 0.75rem;
+  }
+  .hobby-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.5rem;
+  }
+  .hobby-desc {
+    font-size: 0.82rem;
+    color: var(--subtle);
+    line-height: 1.6;
+  }
+  @media (max-width: 900px) {
+    .hobbies-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 500px) {
+    .hobbies-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
