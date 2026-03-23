@@ -33,9 +33,9 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: dist/
-          target: /var/www/portfolio/
-          strip_components: 1
+          source: dist/*
+          target: /var/www/portfolio/dist/
+          strip_components: 0
 
       - name: Reload Nginx
         uses: appleboy/ssh-action@v1.0.3
