@@ -46,19 +46,7 @@ jobs:
           script: systemctl reload nginx
 
       - name: Purge Cloudflare cache
+        uses: jakejarvis/cloudflare-purge-action@master
         env:
-          CF_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
-          CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: |
-          python3 -c "
-          import urllib.request, json, os
-          zone_id = os.environ['CF_ZONE_ID']
-          token = os.environ['CF_API_TOKEN']
-          url = f'https://api.cloudflare.com/client/v4/zones/{zone_id}/purge_cache'
-          data = json.dumps({'purge_everything': True}).encode()
-          req = urllib.request.Request(url, data=data, method='POST')
-          req.add_header('Authorization', f'Bearer {token}')
-          req.add_header('Content-Type', 'application/json')
-          res = urllib.request.urlopen(req)
-          print(res.read().decode())
-          "
+          CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
