@@ -2,24 +2,35 @@ name: Deploy to Hetzner
 
 on:
   push:
-    branches: [master]
+    branches:
+      - master
+  workflow_dispatch:
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+permissions:
+  contents: read
+
+concurrency:
+  group: portfolio-production
+  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
-          cache: npm
+          package-manager-cache: false
 
       - name: Install dependencies
         run: npm ci
@@ -27,26 +38,58 @@ jobs:
       - name: Build site
         run: npm run build
 
-      - name: Copy dist to server
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SERVER_IP }}
-          username: root
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: dist/*
-          target: /var/www/portfolio/dist/
-          strip_components: 0
+      - name: Validate build output
+        run: |
+          set -euo pipefail
+          test -f dist/index.html
+          test -d dist/_astro
 
-      - name: Reload Nginx
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SERVER_IP }}
-          username: root
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: systemctl reload nginx
-
-      - name: Purge Cloudflare cache
-        uses: jakejarvis/cloudflare-purge-action@master
+      - name: Configure restricted SSH identity
         env:
-          CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE_ID }}
-          CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          SERVER_KNOWN_HOSTS: ${{ secrets.SERVER_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          umask 077
+          install -d -m 700 "$HOME/.ssh"
+          printf '%s\n' "$DEPLOY_SSH_KEY" | tr -d '\r' > "$HOME/.ssh/portfolio_v2_deploy"
+          printf '%s\n' "$SERVER_KNOWN_HOSTS" | tr -d '\r' > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/portfolio_v2_deploy" "$HOME/.ssh/known_hosts"
+
+          deploy_fingerprint="$(ssh-keygen -lf "$HOME/.ssh/portfolio_v2_deploy" | awk '{print $2}')"
+          test "$deploy_fingerprint" = "SHA256:GWax5lAmr0Lu2JvzidZ85CW3iKhBQz+0pWpb+2C6O8M"
+
+          ssh-keygen -lf "$HOME/.ssh/known_hosts" |
+            grep -F "SHA256:g14EeyHQwbzrOx9pMeWUuX3jty64/QDTS223t7XRJIA"
+
+      - name: Deploy static files
+        env:
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+        run: |
+          set -euo pipefail
+          test -n "$SERVER_HOST"
+
+          rsync \
+            --recursive \
+            --times \
+            --compress \
+            --delete-delay \
+            --delay-updates \
+            --rsh="ssh -i $HOME/.ssh/portfolio_v2_deploy -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=yes" \
+            dist/ "deploy@${SERVER_HOST}:."
+
+      - name: Verify public site
+        run: |
+          curl \
+            --fail \
+            --silent \
+            --show-error \
+            --retry 5 \
+            --retry-delay 2 \
+            --output /dev/null \
+            https://anshgoyal.dev/
+
+      - name: Remove runner SSH material
+        if: always()
+        run: |
+          rm -f "$HOME/.ssh/portfolio_v2_deploy" "$HOME/.ssh/known_hosts"
