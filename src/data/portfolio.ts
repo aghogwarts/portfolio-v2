@@ -93,7 +93,7 @@ export const PROJECTS = [
       'A local-first Git activity calendar for the terminal, with repository discovery, identity filters, an interactive TUI, and cross-platform releases.',
     tags: ['Go', 'TUI', 'Git', 'CI/CD'],
     href: 'https://github.com/aghogwarts/gitcal',
-    featured: true,
+    featured: false,
   },
   {
     title: 'Torque Assistant',
@@ -109,7 +109,7 @@ export const PROJECTS = [
       'A tested build and troubleshooting guide for using legacy iRiver IFP music players on modern macOS through the reverse-engineered libifp driver.',
     tags: ['macOS', 'USB', 'Shell', 'Hardware'],
     href: 'https://github.com/aghogwarts/iriver',
-    featured: false,
+    featured: true,
   },
   {
     title: 'IOC Scraper',
@@ -125,7 +125,7 @@ export const PROJECTS = [
       'An LPC1768-based health-monitoring prototype integrating temperature, heart-rate, and SpO2 sensors through ADC, I2C, and an LCD interface.',
     tags: ['Embedded C', 'LPC1768', 'I2C', 'Sensors'],
     href: 'https://github.com/aghogwarts/ESD_Lab/tree/main/Project',
-    featured: false,
+    featured: true,
   },
   {
     title: 'Digit RSS Tracker',
