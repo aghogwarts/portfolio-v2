@@ -88,24 +88,51 @@ export const SKILLS = [
 
 export const PROJECTS = [
   {
-    title: 'Project Alpha',
-    description: 'placeholder',
-    tags: ['Python', 'Flask', 'Docker'],
-    href: 'https://github.com/aghogwarts',
+    title: 'Gitcal',
+    description:
+      'A local-first Git activity calendar for the terminal, with repository discovery, identity filters, an interactive TUI, and cross-platform releases.',
+    tags: ['Go', 'TUI', 'Git', 'CI/CD'],
+    href: 'https://github.com/aghogwarts/gitcal',
     featured: true,
   },
   {
-    title: 'Project Beta',
-    description: 'Another project.',
-    tags: ['React', 'Node.js', 'AWS'],
-    href: 'https://github.com/aghogwarts',
+    title: 'Torque Assistant',
+    description:
+      'An AI-assisted incident workflow for automobile assembly torque events, combining RAG, trend detection, structured decisions, and an operator dashboard.',
+    tags: ['Python', 'LangGraph', 'RAG', 'Streamlit'],
+    href: 'https://github.com/aghogwarts/torque-assistant',
+    featured: true,
+  },
+  {
+    title: 'iRiver IFP for macOS',
+    description:
+      'A tested build and troubleshooting guide for using legacy iRiver IFP music players on modern macOS through the reverse-engineered libifp driver.',
+    tags: ['macOS', 'USB', 'Shell', 'Hardware'],
+    href: 'https://github.com/aghogwarts/iriver',
     featured: false,
   },
   {
-    title: 'Project Gamma',
-    description: 'hi',
-    tags: ['C++', 'Linux', 'Bash'],
-    href: 'https://github.com/aghogwarts',
+    title: 'IOC Scraper',
+    description:
+      'A cybersecurity utility that extracts and refangs indicators of compromise from web pages, then exports a concise, analysis-ready CSV.',
+    tags: ['Python', 'Cybersecurity', 'OSINT', 'Web Scraping'],
+    href: 'https://github.com/aghogwarts/ioc-scraper',
+    featured: false,
+  },
+  {
+    title: 'Embedded Health Monitor',
+    description:
+      'An LPC1768-based health-monitoring prototype integrating temperature, heart-rate, and SpO2 sensors through ADC, I2C, and an LCD interface.',
+    tags: ['Embedded C', 'LPC1768', 'I2C', 'Sensors'],
+    href: 'https://github.com/aghogwarts/ESD_Lab/tree/main/Project',
+    featured: false,
+  },
+  {
+    title: 'Digit RSS Tracker',
+    description:
+      "A lightweight VPS automation that monitors an author's RSS feed, remembers previously seen articles, and sends phone alerts through ntfy.",
+    tags: ['Python', 'RSS', 'Cron', 'ntfy'],
+    href: 'https://github.com/aghogwarts/digit-rss-tracker',
     featured: false,
   },
 ];
