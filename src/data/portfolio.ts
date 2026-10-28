@@ -21,7 +21,7 @@ export const SITE = {
 };
 
 export const ABOUT = {
-  bio: 'Restless curiosity has taken me from sketching and painting, through robotics and mechanisms, all the way to programming, hacking, and AI. I believe that we get one life and I aspire to make the most of it :)',
+  bio: 'Restless mind wandering has taken me from sketching and painting, through robotics and mechanisms, all the way to programming, hacking, and AI. I believe that we get one life and I aspire to make the most of it :)',
   tags: [
     'Open Source',
     'CTF & Security',
@@ -160,7 +160,7 @@ export const HOBBIES = [
     abbr: 'RD',
     label: 'Reading',
     accent: '#CE93D8',
-    desc: 'Philosophy, History and Geopolitics. I strive to find my own meaning in things and reading helps me do that. It also gives me a much needed break from screens :)',
+    desc: 'Philosophy, History and Geopolitics. I strive to find my own meaning in things by questioning and reading helps me do that. It also gives me a much needed break from screens :)',
   },
   {
     abbr: 'CM',
