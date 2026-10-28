@@ -7,7 +7,7 @@ import { SITE } from '../data/portfolio';
   <div class="hero-content">
     <p class="hero-eyebrow mono accent">// namaste</p>
     <h1 class="hero-name">Ansh<br />Goyal</h1>
-    <p class="hero-tagline" id="heroTagline"></p>
+    <p class="hero-tagline" id="heroTagline">{SITE.taglines[0]}</p>
     <div class="hero-cta">
       <a href="#projects" class="btn btn-primary">See My Work</a>
       <a href="#contact" class="btn btn-ghost">Get In Touch</a>
@@ -97,17 +97,33 @@ import { SITE } from '../data/portfolio';
 </style>
 
 <script define:vars={{ taglines: SITE.taglines }}>
-  const el = document.getElementById('heroTagline');
-  let i = 0;
-  const tick = () => {
-    if (!el) return;
-    el.style.opacity = '0';
-    setTimeout(() => {
-      el.textContent = taglines[i % taglines.length];
+  (() => {
+    const el = document.getElementById('heroTagline');
+    if (!el || taglines.length < 2) return;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let i = 1;
+    let timer;
+    let fade;
+    const stop = () => {
+      clearInterval(timer);
+      clearTimeout(fade);
       el.style.opacity = '1';
-      i++;
-    }, 300);
-  };
-  tick();
-  setInterval(tick, 2800);
+    };
+    const start = () => {
+      stop();
+      timer = setInterval(() => {
+        el.style.opacity = '0';
+        fade = setTimeout(() => {
+          el.textContent = taglines[i % taglines.length];
+          el.style.opacity = '1';
+          i++;
+        }, 300);
+      }, 2800);
+    };
+    if (!reducedMotion.matches) start();
+    reducedMotion.addEventListener('change', ({ matches }) => {
+      if (matches) stop();
+      else start();
+    });
+  })();
 </script>

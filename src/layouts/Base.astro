@@ -93,20 +93,42 @@ const structuredData = {
   <body>
     <slot />
     <script>
-      // Scroll tracker
-      const observer = new IntersectionObserver(
-        (entries) =>
-          entries.forEach((e) => {
-            if (e.isIntersecting) {
-              e.target.classList.add('visible');
-              observer.unobserve(e.target);
-            }
-          }),
-        { threshold: 0.1 },
+      // Content starts visible; enhance it only when motion is appropriate.
+      const elements = document.querySelectorAll<HTMLElement>('.reveal');
+      const reducedMotion = window.matchMedia(
+        '(prefers-reduced-motion: reduce)',
       );
-      document
-        .querySelectorAll('.reveal')
-        .forEach((el) => observer.observe(el));
+      let observer: IntersectionObserver | undefined;
+      const showAll = () => {
+        observer?.disconnect();
+        elements.forEach((el) => el.classList.remove('reveal-pending'));
+      };
+      if (!reducedMotion.matches && 'IntersectionObserver' in window) {
+        try {
+          observer = new IntersectionObserver(
+            (entries) =>
+              entries.forEach(({ isIntersecting, target }) => {
+                if (isIntersecting) {
+                  target.classList.remove('reveal-pending');
+                  observer?.unobserve(target);
+                }
+              }),
+            { threshold: 0.08 },
+          );
+          elements.forEach((el) => {
+            // Do not hide content already on screen, including direct anchors.
+            if (el.getBoundingClientRect().top >= window.innerHeight) {
+              el.classList.add('reveal-pending');
+              observer?.observe(el);
+            }
+          });
+        } catch {
+          showAll();
+        }
+      }
+      reducedMotion.addEventListener('change', ({ matches }) => {
+        if (matches) showAll();
+      });
     </script>
   </body>
 </html>

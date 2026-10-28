@@ -3,23 +3,24 @@
   --bg: #0d0d0d;
   --bg-alt: #111111;
   --surface: #161616;
-  --border: #1e1e1e;
-  --border-2: #2a2a2a;
+  --border: #292929;
+  --border-2: #454540;
   --text: #f0ece4;
-  --muted: #888880;
-  --subtle: #444440;
+  --muted: #aaa99f;
+  --subtle: #909087;
   --accent: #ff6b35;
   --accent-2: #ffd166;
 
-  --font-display: "Playfair Display", serif;
-  --font-condensed: "Barlow Condensed", sans-serif;
-  --font-body: "Barlow", sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
+  --font-display: 'Playfair Display', serif;
+  --font-condensed: 'Barlow Condensed', sans-serif;
+  --font-body: 'Barlow', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 
   --max-w: 1200px;
   --nav-h: 64px;
   --radius: 4px;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  color-scheme: dark;
 }
 
 /* ── Reset ── */
@@ -44,6 +45,18 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 5px;
+  border-radius: var(--radius);
+}
+:where(section, article)[id] {
+  scroll-margin-top: calc(var(--nav-h) + 1.5rem);
+}
+::selection {
+  background: var(--accent);
+  color: var(--bg);
 }
 img {
   max-width: 100%;
@@ -144,24 +157,43 @@ button {
 
 /* ── Scroll reveal ── */
 .reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition:
-    opacity 0.6s var(--ease),
-    transform 0.6s var(--ease);
-}
-.reveal.visible {
   opacity: 1;
   transform: none;
+  transition:
+    opacity 0.45s var(--ease),
+    transform 0.45s var(--ease);
+}
+.reveal.reveal-pending {
+  opacity: 0;
+  transform: translateY(16px);
 }
 
 /* ── Pill / Tag ── */
 .pill {
   font-family: var(--font-mono);
   font-size: 0.68rem;
-  background: var(--border);
-  color: var(--subtle);
+  background: #222222;
+  color: var(--muted);
   padding: 0.25rem 0.6rem;
   border-radius: 3px;
   letter-spacing: 0.04em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .reveal.reveal-pending {
+    opacity: 1;
+    transform: none;
+  }
+  .btn:hover {
+    transform: none;
+  }
 }

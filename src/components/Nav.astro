@@ -5,7 +5,7 @@ interface Props {
 const { page = 'home' } = Astro.props;
 ---
 
-<nav class="nav" id="nav">
+<nav class="nav" id="nav" aria-label="Main navigation">
   <a href="/" class="nav-logo">AG<span class="accent">.</span></a>
 
   {
@@ -53,14 +53,34 @@ const { page = 'home' } = Astro.props;
     )
   }
 
-  <button class="nav-burger" id="burger" aria-label="Toggle menu">
-    <span></span><span></span><span></span>
-  </button>
+  {
+    page === 'home' && (
+      <button
+        type="button"
+        class="nav-burger"
+        id="burger"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+        aria-controls="mobileMenu"
+      >
+        <>
+          <span />
+          <span />
+          <span />
+        </>
+      </button>
+    )
+  }
 </nav>
 
 {
   page === 'home' && (
-    <div class="mobile-menu" id="mobileMenu">
+    <nav
+      class="mobile-menu"
+      id="mobileMenu"
+      aria-label="Mobile navigation"
+      hidden
+    >
       <ul>
         <li>
           <a href="#about" class="mobile-link">
@@ -93,7 +113,7 @@ const { page = 'home' } = Astro.props;
           </a>
         </li>
       </ul>
-    </div>
+    </nav>
   )
 }
 
@@ -209,31 +229,84 @@ const { page = 'home' } = Astro.props;
     color: var(--accent);
   }
   @media (max-width: 768px) {
-    .nav-links {
+    .nav.menu-ready .nav-links {
       display: none;
     }
-    .nav-burger {
+    .nav.menu-ready .nav-burger {
       display: flex;
+    }
+  }
+  .mobile-menu[hidden] {
+    display: none;
+  }
+  @media (max-width: 768px) {
+    .nav:not(.menu-ready) {
+      height: auto;
+      min-height: var(--nav-h);
+      flex-wrap: wrap;
+    }
+    .nav:not(.menu-ready) .nav-links {
+      width: 100%;
+      flex-wrap: wrap;
+    }
+    .mobile-menu {
+      overflow-y: auto;
     }
   }
 </style>
 
 <script>
-  window.addEventListener('scroll', () => {
-    document
-      .getElementById('nav')
-      ?.classList.toggle('scrolled', window.scrollY > 60);
-  });
-  const burger = document.getElementById('burger');
+  const nav = document.getElementById('nav');
+  const updateScroll = () =>
+    nav?.classList.toggle('scrolled', window.scrollY > 60);
+  updateScroll();
+  window.addEventListener('scroll', updateScroll, { passive: true });
+
+  const burger = document.getElementById('burger') as HTMLButtonElement | null;
   const menu = document.getElementById('mobileMenu');
-  burger?.addEventListener('click', () => {
-    burger.classList.toggle('open');
-    menu?.classList.toggle('open');
-  });
-  document.querySelectorAll('.mobile-link').forEach((l) =>
-    l.addEventListener('click', () => {
-      burger?.classList.remove('open');
-      menu?.classList.remove('open');
-    }),
-  );
+  if (burger && menu) {
+    nav?.classList.add('menu-ready');
+    const links = Array.from(menu.querySelectorAll<HTMLAnchorElement>('a'));
+    let previousOverflow = '';
+    const setMenuOpen = (open: boolean, restoreFocus = false) => {
+      if (open === !menu.hidden) return;
+      if (open) previousOverflow = document.body.style.overflow;
+      menu.hidden = !open;
+      menu.classList.toggle('open', open);
+      burger.classList.toggle('open', open);
+      burger.setAttribute('aria-expanded', String(open));
+      burger.setAttribute(
+        'aria-label',
+        open ? 'Close navigation menu' : 'Open navigation menu',
+      );
+      document.body.style.overflow = open ? 'hidden' : previousOverflow;
+      if (open) links[0]?.focus();
+      else if (restoreFocus) burger.focus();
+    };
+    burger.addEventListener('click', () => setMenuOpen(menu.hidden, true));
+    links.forEach((link) =>
+      link.addEventListener('click', () => setMenuOpen(false, true)),
+    );
+    document.addEventListener('keydown', (event) => {
+      if (menu.hidden) return;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setMenuOpen(false, true);
+      } else if (event.key === 'Tab') {
+        const last = links[links.length - 1] ?? burger;
+        if (event.shiftKey && document.activeElement === burger) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          burger.focus();
+        }
+      }
+    });
+    window
+      .matchMedia('(max-width: 768px)')
+      .addEventListener('change', ({ matches }) => {
+        if (!matches) setMenuOpen(false);
+      });
+  }
 </script>
