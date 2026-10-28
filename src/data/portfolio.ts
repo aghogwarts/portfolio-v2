@@ -1,6 +1,6 @@
 export const SITE = {
   name: 'Ansh Goyal',
-  email: 'agcodes22@gmail.com',
+  email: 'namaste@anshgoyal.dev',
   location: 'Pune, India',
   taglines: [
     'Developer & Hacker',

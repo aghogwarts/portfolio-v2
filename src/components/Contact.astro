@@ -45,6 +45,8 @@ import Icon from './Icon.astro';
           }
         </div>
       </div>
+      {
+        /* Contact form deferred until real delivery is implemented.
       <form class="contact-form reveal" id="contactForm">
         <div class="form-row">
           <div class="form-group">
@@ -75,6 +77,8 @@ import Icon from './Icon.astro';
         <button type="submit" class="btn btn-primary btn-full">Send It →</button
         >
       </form>
+      */
+      }
     </div>
   </div>
 </section>
@@ -122,6 +126,7 @@ import Icon from './Icon.astro';
     color: var(--accent);
     flex-shrink: 0;
   }
+  /* Deferred contact form styles.
   .contact-form {
     display: flex;
     flex-direction: column;
@@ -160,17 +165,22 @@ import Icon from './Icon.astro';
     outline: none;
     border-color: var(--accent);
   }
+  */
   @media (max-width: 768px) {
     .contact-grid {
       grid-template-columns: 1fr;
       gap: 3rem;
     }
+    /* Deferred contact form layout.
     .form-row {
       grid-template-columns: 1fr;
     }
+    */
   }
 </style>
 
+{
+  /* Deferred form demo; replace simulated success with real delivery before enabling.
 <script>
   document.getElementById('contactForm')?.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -187,3 +197,5 @@ import Icon from './Icon.astro';
     }, 3000);
   });
 </script>
+*/
+}
