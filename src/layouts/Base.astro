@@ -4,11 +4,52 @@ interface Props {
   description?: string;
 }
 const {
-  title = 'Ansh Goyal',
-  description = 'Developer, Hacker, Explorer. Building things that matter.',
+  title = 'Ansh Goyal — Developer, Security & AI',
+  description = 'Explore Ansh Goyal’s projects in software development, cybersecurity, AI, and embedded systems, alongside motorcycle rides and stories beyond the screen.',
 } = Astro.props;
 
+import { SITE } from '../data/portfolio';
 import '../styles/global.css';
+
+const canonicalPath = Astro.url.pathname.endsWith('/')
+  ? Astro.url.pathname
+  : `${Astro.url.pathname}/`;
+const canonicalURL = new URL(canonicalPath, Astro.site);
+const homeURL = new URL('/', Astro.site);
+const imageURL = new URL('/social-preview.png', Astro.site);
+const imageAlt = 'Ansh Goyal — Developer, Security & AI. anshgoyal.dev';
+const personID = new URL('#person', homeURL).href;
+const websiteID = new URL('#website', homeURL).href;
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Person',
+      '@id': personID,
+      name: SITE.name,
+      url: homeURL.href,
+      sameAs: SITE.social.map(({ href }) => href),
+    },
+    {
+      '@type': 'WebSite',
+      '@id': websiteID,
+      url: homeURL.href,
+      name: `${SITE.name} — Portfolio`,
+      inLanguage: 'en',
+      author: { '@id': personID },
+    },
+    {
+      '@type': 'WebPage',
+      '@id': `${canonicalURL.href}#webpage`,
+      url: canonicalURL.href,
+      name: title,
+      description,
+      inLanguage: 'en',
+      isPartOf: { '@id': websiteID },
+      about: { '@id': personID },
+    },
+  ],
+};
 ---
 
 <!doctype html>
@@ -18,6 +59,28 @@ import '../styles/global.css';
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <title>{title}</title>
+    <link rel="canonical" href={canonicalURL.href} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL.href} />
+    <meta property="og:image" content={imageURL.href} />
+    <meta property="og:image:secure_url" content={imageURL.href} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageURL.href} />
+    <meta name="twitter:image:alt" content={imageAlt} />
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')}
+    />
     <link rel="icon" type="image/png" sizes="1024x1024" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
